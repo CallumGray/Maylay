@@ -332,6 +332,14 @@ def start():
     shine = Move(5, 100, 0, 80, 0)
 
     worldsteps = knockbackWorldSteps(yoshis,0,0,nair,fox,80,0,True,False,True,True)
+
+    # Find last hitstun frame
+    lastStun = True
+    for i, step in enumerate(worldsteps):
+        if lastStun and step.isActionable:
+            lastStun = False
+            worldsteps[i-1].printStep()
+
     worldsteps[-1].printStep()
 
 
