@@ -1,11 +1,15 @@
 import math
 
-import Character
-import Stage
-from Move import Move
+from character import Character
+import character as char
 
-from Step import Step
-from Step import WorldStep
+from step import Step, WorldStep
+import step
+
+from stage import Stage
+import stage
+
+from move import Move
 
 '''
 KNOCKBACK
@@ -325,22 +329,17 @@ def knockbackWorldSteps(stage: Stage, x: float, y: float, move: Move, character:
 
 
 def start():
-    fox = Character.getCharacter('fox')
-    yoshis = Stage.getStage('yoshis')
+    fox = char.getCharacter('fox')
+    yoshis = stage.getStage('yoshis')
 
     nair = Move(12, 100, 10)
     shine = Move(5, 100, 0, 80, 0)
 
-    worldsteps = knockbackWorldSteps(yoshis,0,0,nair,fox,80,0,True,False,True,True)
-
-    # Find last hitstun frame
-    lastStun = True
-    for i, step in enumerate(worldsteps):
-        if lastStun and step.isActionable:
-            lastStun = False
-            worldsteps[i-1].printStep()
-
-    worldsteps[-1].printStep()
+    worldsteps = knockbackWorldSteps(yoshis,0,0,nair,fox,80,0,True,False,True,True,False)
+    lastHitstunFrame = step.getLastHitstunFrame(worldsteps)
+    lastHitstunFrame.printStep('Last hitstun step')
+    lastHitstunFrame.printStep('Last hitstun step 2')
+    lastHitstunFrame.printStep()
 
 
 if __name__ == '__main__':

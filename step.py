@@ -7,14 +7,17 @@ class Step:
         self.charxv = charxv
         self.charyv = charyv
 
-    def printStep(self) -> None:
+    def printStep(self,name='') -> None:
+        if name != '':
+            print(name)
+            print()
         print('x:',self.x)
         print('y:', self.y)
         print('kbxv:', self.kbxv)
         print('kbyv:', self.kbyv)
         print('charxv:', self.charxv)
         print('charyv:', self.charyv)
-        print()
+        print('- - - - - - - - - - -')
 
 class WorldStep:
     def __init__(self, worldX: float, worldY: float, kbxv: float, kbyv: float, charxv: float, charyv: float, frame:int, isActionable:bool = False, isDead:bool = False):
@@ -28,7 +31,10 @@ class WorldStep:
         self.isActionable = isActionable
         self.isDead = isDead
 
-    def printStep(self) -> None:
+    def printStep(self,name='') -> None:
+        if name != '':
+            print(name)
+            print()
         print('x:',self.worldX)
         print('y:', self.worldY)
         print('kbxv:', self.kbxv)
@@ -38,4 +44,14 @@ class WorldStep:
         print('frame',self.frame)
         print('Actionable?',self.isActionable)
         print('Dead?',self.isDead)
-        print()
+        print('- - - - - - - - - - -')
+
+def getLastHitstunFrame(worldSteps:[WorldStep]) -> WorldStep:
+
+    if len(worldSteps) > 0 and not worldSteps[0].isActionable:
+        for i, step in enumerate(worldSteps):
+            if step.isActionable:
+                return worldSteps[i - 1]
+
+    # No actionable frames (so died?)
+    return worldSteps[-1]
