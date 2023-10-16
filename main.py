@@ -1,15 +1,15 @@
 import math
 
-from character import Character
-import character as char
+from characterModule import Character
+import characterModule as charMod
 
-from step import Step, WorldStep
-import step
+from stepModule import Step, WorldStep
+import stepModule as stepMod
 
-from stage import Stage
-import stage
+from stageModule import Stage
+import stageModule as stageMod
 
-from move import Move
+from moveModule import Move
 
 '''
 KNOCKBACK
@@ -329,14 +329,14 @@ def knockbackWorldSteps(stage: Stage, x: float, y: float, move: Move, character:
 
 
 def start():
-    fox = char.getCharacter('fox')
-    yoshis = stage.getStage('yoshis')
+    fox = charMod.getCharacter('fox')
+    yoshis = stageMod.getStage('yoshis')
 
     nair = Move(12, 100, 10)
     shine = Move(5, 100, 0, 80, 0)
 
-    worldsteps = knockbackWorldSteps(yoshis,0,0,nair,fox,80,0,True,False,True,True,False)
-    lastHitstunFrame = step.getLastHitstunFrame(worldsteps)
+    worldSteps = knockbackWorldSteps(yoshis,0,0,nair,fox,80,0,True,False,True,True,False)
+    lastHitstunFrame = stepMod.getLastHitstunFrame(worldSteps)
     lastHitstunFrame.printStep('Last hitstun step')
     lastHitstunFrame.printStep('Last hitstun step 2')
     lastHitstunFrame.printStep()
