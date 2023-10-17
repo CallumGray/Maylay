@@ -46,12 +46,4 @@ class WorldStep:
         print('Dead?',self.isDead)
         print('- - - - - - - - - - -')
 
-def getLastHitstunFrame(worldSteps:[WorldStep]) -> WorldStep:
 
-    if len(worldSteps) > 0 and not worldSteps[0].isActionable:
-        for i, step in enumerate(worldSteps):
-            if step.isActionable:
-                return worldSteps[i - 1]
-
-    # No actionable frames (so died?)
-    return worldSteps[-1]
