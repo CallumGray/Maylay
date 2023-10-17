@@ -349,7 +349,7 @@ def knockbackWorldSteps(stage: Stage, x: float, y: float, move: Move, character:
         charyv = acs.charyv
 
         if isDead(stage, worldX, worldY, kbyv):
-            worldStep = WorldStep(worldX, worldY, kbxv, kbyv, charxv, charyv, frame, True, True)
+            worldStep = WorldStep(worldX, worldY, kbxv, kbyv, charxv, charyv, frame, False, True)
             worldSteps.append(worldStep)
             return worldSteps
         else:
@@ -379,3 +379,34 @@ def getWorldPlotData(worldSteps:[WorldStep]) -> ([float],[float],[bool],[str]):
     frameState = ['dead' if worldStep.isDead else 'hitstunEnd' if worldStep.frame == lastHitstunFrame else 'normal' for worldStep in worldSteps]
 
     return xs, ys, actionable, frameState
+
+
+# This is for important kill moves like upsmash. Known that because of deadzone people will always consistently be inputting deadzone value
+# Can calculate using iKneedata. value for upsmash is -17.46 because 'strength' at DI in deadzone is 97% so -18 * 0.97 = -17.46
+def findHighestSurvivalPercentFixedDI(stage:Stage,x:float, y:float, move:Move, character:Character, percent:int=0, DI:float=0, grounded:bool=False,isCrouched:bool=False,hitRight:bool=True) -> int:
+    if (percent > 300):
+        return None
+
+    steps:[WorldStep] = knockbackWorldSteps(stage,x,y,move,character,percent,DI,grounded,isCrouched,True,True,hitRight)
+    if not steps[-1].isDead:
+        return findHighestSurvivalPercentFixedDI(stage, x, y, move, character, percent + 1, DI, grounded, isCrouched, hitRight)
+
+    return percent
+
+
+# Finds highest percent for latest survival (inefficient version!)
+# Note this DI angle is to the nearest degree and doesnt take deadzones into account (might be off by 1 or 2 percent)
+def findHighestSurvivalPercent(stage:Stage,x:float, y:float, move:Move, character:Character, percent:int=0, grounded:bool=False,isCrouched:bool=False,hitRight:bool=True) -> int:
+
+    if(percent > 300):
+        return None
+
+    for DI in range(18,-19,-1):
+        steps:[WorldStep] = knockbackWorldSteps(stage,x,y,move,character,percent,DI,grounded,isCrouched,True,True,hitRight)
+        if not steps[-1].isDead:
+            # surviving here so must increase until all dead
+            return findHighestSurvivalPercent(stage,x,y,move,character,percent+1,grounded,isCrouched,hitRight)
+
+    # Gets here so they must all be dead, decrease the percent
+    return percent
+
