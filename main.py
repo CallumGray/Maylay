@@ -1,6 +1,6 @@
 import time
 
-from matplotlib.colors import ListedColormap,LinearSegmentedColormap
+from matplotlib.colors import LinearSegmentedColormap
 
 import characterModule as charMod
 import stageModule as stageMod
@@ -30,6 +30,7 @@ dreamland = stageMod.getStage('dreamland')
 
 upsmash = Move(18,112,30,0,80)
 nair = Move(12, 100, 10)
+bair = Move(15, 100, 0)
 shine = Move(5, 100, 0, 80, 0)
 
 def trajectoryPlotExample():
@@ -75,28 +76,50 @@ def heatmapExample():
 
     stage = yoshis
     char = puff
-    move = nair
+    move = bair
 
-    pointcount = 0
+    gap = 5
+    xs = [x for x in range(0,int(stage.right)+gap,gap)]
+    ys = [y for y in range(0,int(stage.top)+gap,gap)]
+    lxs = [x for x in range(-gap,int(stage.left)-gap,-gap)]
 
-    xs = [x for x in range(0,int(stage.right), 20)]
-    ys = [y for y in range(0,int(stage.top/2),20)]
+    pointsdone = 0
+    pointcount = (len(xs)+len(lxs))*len(ys)
 
     zs = np.zeros((len(ys),len(xs)))
+    lzs = np.zeros((len(ys),len(lxs)))
 
     # iterate through points on the stage and where they kill
     for xn,x in enumerate(xs):
         for yn,y in enumerate(ys):
-            pointcount+=1
+            pointsdone+=1
+            print(pointsdone,'/',pointcount)
             highestSurvivalPercent = phys.findHighestSurvivalPercent(stage,x,y,move,char,0,False,False,True)
             zs[yn][xn] = (highestSurvivalPercent)
 
-    print(pointcount)
+    for xn, x in enumerate(lxs):
+        for yn, y in enumerate(ys):
+            pointsdone += 1
+            print(pointsdone, '/', pointcount)
+            highestSurvivalPercent = phys.findHighestSurvivalPercent(stage, x, y, move, char, 0, False, False, False)
+            lzs[yn][xn] = (highestSurvivalPercent)
 
-    cmap = LinearSegmentedColormap.from_list("custom",["red","orange","yellow","green"])
+    cmap = LinearSegmentedColormap.from_list("custom",['red','orangered','orange','yellow','green','blue'])
+
+    img = plt.imread("ys2.png")
     fig, ax = plt.subplots()
-    mesh = ax.pcolor(xs,ys, zs,cmap=cmap,vmin=50,vmax=150)
+    ax.imshow(img,extent=[yoshis.left,yoshis.right,yoshis.bottom,yoshis.top])
+    #ax.imshow(zs,cmap=cmap,interpolation='bicubic',alpha=0.5,extent=[yoshis.left,yoshis.right,yoshis.bottom,yoshis.top])
+    mesh = ax.pcolormesh(xs,ys, zs,cmap=cmap,vmin=60,vmax=120, alpha=0.5)
+    mesh2 = ax.pcolormesh(lxs,ys,lzs,cmap=cmap,vmin=60,vmax=120,alpha=0.5)
+
     plt.colorbar(mesh,ax=ax)
+    plt.xticks(np.arange(-200,200,25))
+    plt.axvline(stage.left)
+    plt.axvline(stage.right)
+    plt.axhline(stage.top)
+    #plt.savefig("test.png")
+
     plt.show()
 
 
