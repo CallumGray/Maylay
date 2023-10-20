@@ -4,8 +4,8 @@ from matplotlib.colors import LinearSegmentedColormap
 
 import characterModule as charMod
 import stageModule as stageMod
+import moveModule as moveMod
 import physicsModule as phys
-from moveModule import Move
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -28,10 +28,10 @@ fod = stageMod.getStage('fod')
 bf = stageMod.getStage('battlefield')
 dreamland = stageMod.getStage('dreamland')
 
-upsmash = Move(18,112,30,0,80)
-nair = Move(12, 100, 10)
-bair = Move(15, 100, 0)
-shine = Move(5, 100, 0, 80, 0)
+upsmash = moveMod.getMove('fox','upsmash')
+nair = moveMod.getMove('fox','nair')
+bair = moveMod.getMove('fox', 'bair')
+shine = moveMod.getMove('fox', 'shine')
 
 def trajectoryPlotExample():
     worldSteps = phys.knockbackWorldSteps(yoshis, 0, 0, nair, fox, 120, 0, True, False, True, True, False)
@@ -106,7 +106,7 @@ def heatmapExample():
 
     cmap = LinearSegmentedColormap.from_list("custom",['red','orangered','orange','yellow','green','blue'])
 
-    img = plt.imread("ys2.png")
+    img = plt.imread("stages/ys.png")
     fig, ax = plt.subplots()
     ax.imshow(img,extent=[yoshis.left,yoshis.right,yoshis.bottom,yoshis.top])
     #ax.imshow(zs,cmap=cmap,interpolation='bicubic',alpha=0.5,extent=[yoshis.left,yoshis.right,yoshis.bottom,yoshis.top])
@@ -114,11 +114,11 @@ def heatmapExample():
     mesh2 = ax.pcolormesh(lxs,ys,lzs,cmap=cmap,vmin=60,vmax=120,alpha=0.5)
 
     plt.colorbar(mesh,ax=ax)
-    plt.xticks(np.arange(-200,200,25))
+    plt.xticks(np.arange(-200,200,50))
     plt.axvline(stage.left)
     plt.axvline(stage.right)
     plt.axhline(stage.top)
-    #plt.savefig("test.png")
+    plt.savefig("test.png")
 
     plt.show()
 
