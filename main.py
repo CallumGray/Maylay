@@ -2,6 +2,7 @@ import time
 
 from matplotlib.colors import LinearSegmentedColormap
 
+import Tumble
 import characterModule as charMod
 import stageModule as stageMod
 import moveModule as moveMod
@@ -28,10 +29,6 @@ fod = stageMod.getStage('fod')
 bf = stageMod.getStage('battlefield')
 dreamland = stageMod.getStage('dreamland')
 
-upsmash = moveMod.getMove('fox','upsmash')
-nair = moveMod.getMove('fox','nair')
-bair = moveMod.getMove('fox', 'bair')
-shine = moveMod.getMove('fox', 'shine')
 
 def trajectoryPlotExample():
     worldSteps = phys.knockbackWorldSteps(yoshis, 0, 0, nair, fox, 120, 0, True, False, True, True, False)
@@ -71,7 +68,7 @@ def upsmashExample():
     print('Time: ', timeEnd - timeStart)
 
 
-def heatmapExample():
+def heatmapExampleBothDirections():
     print("Heatmap of where bair kills puff!")
 
     stage = yoshis
@@ -123,9 +120,21 @@ def heatmapExample():
     plt.show()
 
 
-def start():
-    heatmapExample()
+def foxTumblesPuff():
+    moveStrings = ['nair','bair','jab','dash','dtilt','uptilt1', 'uptilt2','upsmash']
+    moves = [moveMod.getMove('fox',name) for name in moveStrings]
+    Tumble.generateTumbleChart(moves,puff)
+    Tumble.generateTumbleChart(moves,puff,True)
 
+def start():
+
+    foxTumblesPuff()
+
+    #heatmapExampleBothDirections()
+
+    #x = Tumble.generateTumbleChart([upsmash,nair,shine,bair],fox)
+    #y = Tumble.generateTumbleChart([upsmash, nair, shine, bair], fox,True)
+    #z = Tumble.generateTumbleChartBoth([upsmash, nair, shine, bair], fox)
 
 if __name__ == '__main__':
     start()

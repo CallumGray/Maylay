@@ -111,7 +111,7 @@ def calculateEarliestTumble(move: Move, character: Character, isCrouched: bool =
 
 
 def setTumble(move: Move, character: Character, isCrouched: bool) -> int:
-    result = getKnockback(move, character, None, isCrouched)
+    result = getKnockback(move, character, 69, isCrouched)
     return 0 if result > TUMBLE_THRESHOLD else None
 
 
