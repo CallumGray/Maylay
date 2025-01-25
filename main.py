@@ -29,9 +29,10 @@ fod = stageMod.getStage('fod')
 bf = stageMod.getStage('battlefield')
 dreamland = stageMod.getStage('dreamland')
 
+bair = moveMod.getMove('fox','bair')
 
 def trajectoryPlotExample():
-    worldSteps = phys.knockbackWorldSteps(yoshis, 0, 0, nair, fox, 120, 0, True, False, True, True, False)
+    worldSteps = phys.knockbackWorldSteps(bf, 0, 0, bair, puff, 100, 0, True, False, True, True, False)
     xs, ys, actionable, frameState = phys.getWorldPlotData(worldSteps)
 
     dataframe = pd.DataFrame({'xs': xs, 'ys': ys, 'actionable': actionable, 'frameState': frameState})
@@ -42,10 +43,10 @@ def trajectoryPlotExample():
     graph = sns.scatterplot(data=dataframe, x='xs', y='ys', hue='actionable', palette=palette, style='frameState',
                             markers=markers)
     graph.legend().remove()
-    graph.axvline(yoshis.left)
-    graph.axvline(yoshis.right)
-    graph.axhline(yoshis.top)
-    graph.axhline(yoshis.bottom)
+    graph.axvline(bf.left)
+    graph.axvline(bf.right)
+    graph.axhline(bf.top)
+    graph.axhline(bf.bottom)
     plt.show()
 
 def upsmashExample():
@@ -71,7 +72,7 @@ def upsmashExample():
 def heatmapExampleBothDirections():
     print("Heatmap of where bair kills puff!")
 
-    stage = yoshis
+    stage = bf
     char = puff
     move = bair
 
@@ -103,9 +104,9 @@ def heatmapExampleBothDirections():
 
     cmap = LinearSegmentedColormap.from_list("custom",['red','orangered','orange','yellow','green','blue'])
 
-    img = plt.imread("stages/ys.png")
+    img = plt.imread("stages/bf.png")
     fig, ax = plt.subplots()
-    ax.imshow(img,extent=[yoshis.left,yoshis.right,yoshis.bottom,yoshis.top])
+    ax.imshow(img,extent=[bf.left,bf.right,bf.bottom,bf.top])
     #ax.imshow(zs,cmap=cmap,interpolation='bicubic',alpha=0.5,extent=[yoshis.left,yoshis.right,yoshis.bottom,yoshis.top])
     mesh = ax.pcolormesh(xs,ys, zs,cmap=cmap,vmin=60,vmax=120, alpha=0.5)
     mesh2 = ax.pcolormesh(lxs,ys,lzs,cmap=cmap,vmin=60,vmax=120,alpha=0.5)
@@ -128,8 +129,8 @@ def foxTumblesPuff():
 
 def start():
 
-    foxTumblesPuff()
-
+#    foxTumblesPuff()
+    trajectoryPlotExample()
     #heatmapExampleBothDirections()
 
     #x = Tumble.generateTumbleChart([upsmash,nair,shine,bair],fox)

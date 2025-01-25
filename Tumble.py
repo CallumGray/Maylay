@@ -19,6 +19,7 @@ def generateTumbleChart(moves:[Move],character:Character,crouching:bool=False) -
     tumblesdf = pd.DataFrame(tumbles, columns=['Move', 'Percent'])
     tumblesdf.sort_values('Percent', inplace=True)
     ax = sns.barplot(data=tumblesdf, x='Move', y='Percent', hue=crouching, palette=crouchPalette)
+    ax.tick_params(axis='x', labelrotation=90)
     ax.legend_.remove()
     plt.xlabel("")
     plt.ylabel("")
@@ -27,6 +28,7 @@ def generateTumbleChart(moves:[Move],character:Character,crouching:bool=False) -
         labels = [int(label) if label > 0 else "" for label in container.datavalues]
         ax.bar_label(container, labels=labels, label_type='center', fontsize=20, color='w')
 
+    plt.tight_layout()
     plt.show()
     return None
 
